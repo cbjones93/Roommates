@@ -16,6 +16,7 @@ namespace Roommates
             RoomRepository roomRepo = new RoomRepository(CONNECTION_STRING);
             ChoreRepository choreRepo = new ChoreRepository(CONNECTION_STRING);
             RoommateRepository roommateRepo = new RoommateRepository(CONNECTION_STRING);
+            
 
             bool runProgram = true;
             while (runProgram)
@@ -84,7 +85,34 @@ namespace Roommates
                         Console.ReadKey();
                         break;
 
+                    case ("Show all chores unassigned to roommates"):
+                        List<Chore> unassignedchores = choreRepo.GetUnassignedChores();
+                        foreach (Chore c in unassignedchores)
+                        {
+                            Console.WriteLine($"{c.Name} has an Id of {c.Id}.");
+                        }
+                        Console.WriteLine("Press any key to continue");
+                        Console.ReadKey();
+                        break;
 
+                    case ("Assign a chore"):
+                        List<Roommate> roommates = roommateRepo.GetAll();
+                        foreach (Roommate mate in roommates)
+                        {
+                            Console.WriteLine($"{mate.Id}) {mate.FirstName}");
+                        }
+                        Console.Write("Search Roommate by Id: ");
+                        int roomie = int.Parse(Console.ReadLine());
+                        List<Chore> choreList = choreRepo.GetAll();
+                        foreach (Chore chore in choreList)
+                        {
+                            Console.WriteLine($"{chore.Id}) {chore.Name}");
+                        }
+                            Console.Write("Assign by ChoreId: ");
+                            int assignChore = int.Parse(Console.ReadLine());
+                        choreRepo.AssignChore(assignChore, roomie);
+
+                        break; 
                     case ("Exit"):
                         runProgram = false;
                         break;
@@ -105,6 +133,8 @@ namespace Roommates
                 "Add a room",
                 "Show all chores",
                 "Search for roommate",
+                "Show all chores unassigned to roommates",
+                "Assign a chore",
                 "Exit"
             };
 
